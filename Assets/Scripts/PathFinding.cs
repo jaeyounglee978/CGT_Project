@@ -38,7 +38,7 @@ public static class PathFinding
 
 			RaycastHit[] hits = Physics.RaycastAll (s, Vector3.down);
 
-			for(int j = 0; i < hits.Length; i++)
+			for(int j = 0; j < hits.Length; j++)
 			{
 				if (hits [j].collider.gameObject.tag == "obstacle")
 					break;
