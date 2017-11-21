@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+//using UnityEngine.SceneManagement;
 
 public class SceneManager : MonoBehaviour
 {
@@ -34,7 +34,7 @@ public class SceneManager : MonoBehaviour
 	{
 		if (ReplanningFlag)
 		{
-			Debug.Log ("Replanning Start");
+			//Debug.Log ("Replanning Start");
 			path = PathFinding.FindPath (Agent.transform.position, Target.transform.position, leftBottom.x, rightTop.x, leftBottom.z, rightTop.z);
 			ReplanningFlag = false;
 			currentPath = path.Pop ();
@@ -44,20 +44,21 @@ public class SceneManager : MonoBehaviour
 			if ((Agent.transform.position - currentPath).magnitude <= 0.01f)
 			{
 				currentPath = path.Pop ();
-				currentPath.y += Agent.GetComponent<Bounds> ().center.y;
+				currentPath.y += Agent.GetComponent<Renderer> ().bounds.center.y;
 			}
 			
 			Agent.transform.position = Vector3.SmoothDamp (Agent.transform.position, currentPath, ref velocity, 1.0f);
 		}
 
 		// If agent arrived target, check clear condition.
+        /*
 		if (Agent.transform.position == Target.transform.position)
 		{
 			if (CheckClearState ())
 				Debug.Log ("Clear!");
 			else
 				Debug.Log ("Failed");
-		}
+		}*/
 	}
 
 	public void ObjectPlaced()
