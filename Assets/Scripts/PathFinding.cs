@@ -140,7 +140,7 @@ public static class PathFinding
 
             samples.Add(x_new);
             addEdge(x_parent, x_new);
-            rewireVertices(samples, X_near, x_new);
+            rewireVertices(X_near, x_new);
         }
     }
 
@@ -240,8 +240,23 @@ public static class PathFinding
         return true;
     }
 
-    private static void rewireVertices(List<Sample> samples, List<Sample> X_near, Sample x_new)
+    //Optimization
+    //If path passes x_new is shorter than the original path, set x_new to be a new parent
+    private static void rewireVertices(List<Sample> X_near, Sample x_new)
     {
-        
+        for (int i = 0; i< X_near.Count; i++)
+        {
+            Sample x_n = X_near[i];
+            float dist = (x_n.pos - x_new.pos).magnitude;
+            if (x_new.cost + dist < x_n.cost)
+            {
+                if (collisionFree(x_n, x_new))
+                {
+                    Sample x_old = x_n.parent;
+                    x_old.childs.Remove(x_n);
+                    addEdge(x_new, x_n);
+                }
+            }
+        }
     }
 }
