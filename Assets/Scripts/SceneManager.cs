@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SceneManager : MonoBehaviour
 {
@@ -40,7 +41,7 @@ public class SceneManager : MonoBehaviour
 		}
 		else
 		{
-			if (Agent.transform.position == currentPath)
+			if ((Agent.transform.position - currentPath).magnitude <= 0.01f)
 			{
 				currentPath = path.Pop ();
 				currentPath.y += Agent.GetComponent<Bounds> ().center.y;
@@ -68,4 +69,5 @@ public class SceneManager : MonoBehaviour
 	{
 		return true;
 	}
+
 }
