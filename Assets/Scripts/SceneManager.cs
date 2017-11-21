@@ -41,9 +41,10 @@ public class SceneManager : MonoBehaviour
 		else
 		{
 			if (Agent.transform.position == currentPath)
+			{
 				currentPath = path.Pop ();
-
-			currentPath.y += Agent.GetComponent<Bounds>().center.y;
+				currentPath.y += Agent.GetComponent<Bounds> ().center.y;
+			}
 			
 			Agent.transform.position = Vector3.SmoothDamp (Agent.transform.position, currentPath, ref velocity, 1.0f);
 		}

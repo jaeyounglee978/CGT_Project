@@ -93,13 +93,13 @@ public static class PathFinding
 		samples.Add (q_quit);
 	}
 
-	public static Stack<Vector3> FindPath(Vector3 pos_init, Vector3 pos_quit)
+	public static Stack<Vector3> FindPath(Vector3 pos_init, Vector3 pos_quit, float wld_left, float wld_right, float wld_top, float wld_bottom)
 	{
 		Sample q_init = new Sample (pos_init, null);
 		Sample q_quit = new Sample (pos_quit, null);
 		List<Sample> samples = new List<Sample> ();
 
-		RRT_PathFinding (samples, q_init, q_quit, 0, 0, 0, 0, 5000);
+		RRT_PathFinding (samples, q_init, q_quit, wld_left, wld_right, wld_top, wld_bottom, 5000);
 
 		Sample d = q_quit;
 		Stack<Vector3> positionStack = new Stack<Vector3> ();
