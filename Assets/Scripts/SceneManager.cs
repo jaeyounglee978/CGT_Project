@@ -25,7 +25,7 @@ public class SceneManager : MonoBehaviour
 		Bounds floorBound = Floor.GetComponent<Renderer> ().bounds;
 		leftBottom = new Vector3 (floorBound.center.x - floorBound.size.x / 2, 0, floorBound.center.z - floorBound.size.z / 2);
 		rightTop = new Vector3 (floorBound.center.x + floorBound.size.x / 2, 0, floorBound.center.z + floorBound.size.z / 2);
-
+		Debug.Log (Target.transform.position);
 	}
 	
 	// Update is called once per frame
