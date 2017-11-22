@@ -102,7 +102,7 @@ public static class PathFinding
 		List<Sample> samples = new List<Sample> ();
 
         //RRT_PathFinding (samples, q_init, q_quit, wld_left, wld_right, wld_top, wld_bottom, 100);
-        RRT_star (samples, q_init, q_quit, wld_left, wld_right, wld_top, wld_bottom, 100);
+        RRT_star (samples, q_init, q_quit, wld_left, wld_right, wld_top, wld_bottom, 5000);
 
         Sample d = q_quit;
 		Stack<Vector3> positionStack = new Stack<Vector3> ();
@@ -132,7 +132,7 @@ public static class PathFinding
         for (int i = 1; i < samples.Count; i++)
         {
             Sample x_new = samples[i]; // We will find its parent
-            List<Sample> X_near = near(visited, x_new, (wld_left - wld_right) / 10); // I assigned this rad value without thinking. Someday matbe we should change this value
+            List<Sample> X_near = near(visited, x_new, (wld_left - wld_right) / 5); // I assigned this rad value without thinking. Someday matbe we should change this value
             if (X_near.Count == 0)// In the case that there is no Sample near x_new, unfortunately
             {
                 X_near.Add(FindClosestSample(x_new.pos, visited));
