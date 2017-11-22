@@ -238,6 +238,14 @@ public static class PathFinding
     //Now it only returns true. We should modify it
     private static bool collisionFree(Sample x1, Sample x2)
     {
+        RaycastHit[] hits = Physics.RaycastAll(x1.pos, x2.pos - x1.pos);
+        for (int i = 0; i < hits.Length; i++)
+        {
+            if ((hits[i].point - x1.pos).magnitude > (x2.pos - x1.pos).magnitude)
+                continue;
+            if (hits[i].collider.gameObject.tag == "obstacle")
+                return false;
+        }
         return true;
     }
 
