@@ -14,6 +14,7 @@ public class Sample
     {
         pos = p;
         parent = null;
+        childs = new List<Sample>();
     }
 
 	public Sample(Vector3 p, Sample parentSample)
@@ -21,6 +22,7 @@ public class Sample
 		pos = p;
 		parent = parentSample;
         cost = -1;
+        childs = new List<Sample>();
 	}
 
 	public void AddChild(Sample s)
@@ -99,9 +101,10 @@ public static class PathFinding
 		Sample q_quit = new Sample (pos_quit, null);
 		List<Sample> samples = new List<Sample> ();
 
-		RRT_PathFinding (samples, q_init, q_quit, wld_left, wld_right, wld_top, wld_bottom, 5000);
+        //RRT_PathFinding (samples, q_init, q_quit, wld_left, wld_right, wld_top, wld_bottom, 100);
+        RRT_star (samples, q_init, q_quit, wld_left, wld_right, wld_top, wld_bottom, 100);
 
-		Sample d = q_quit;
+        Sample d = q_quit;
 		Stack<Vector3> positionStack = new Stack<Vector3> ();
 
 		// climb up tree
@@ -121,14 +124,18 @@ public static class PathFinding
         samples.Add(q_init);
         q_init.cost = 0;
         samplingWOP(samples, wld_left, wld_right, wld_top, wld_bottom, n);
+        samples.Add(q_quit);
 
-        for (int i = 0; i < samples.Count; i++)
+        List<Sample> visited = new List<Sample>();
+        visited.Add(q_init);
+
+        for (int i = 1; i < samples.Count; i++)
         {
             Sample x_new = samples[i]; // We will find its parent
-            List<Sample> X_near = near(samples, i, (wld_left - wld_right) / 10); // I assigned this rad value without thinking. Someday matbe we should change this value
+            List<Sample> X_near = near(visited, x_new, (wld_left - wld_right) / 10); // I assigned this rad value without thinking. Someday matbe we should change this value
             if (X_near.Count == 0)// In the case that there is no Sample near x_new, unfortunately
             {
-                X_near.Add(FindClosestSample(x_new.pos, samples));
+                X_near.Add(FindClosestSample(x_new.pos, visited));
             }
 
             List<KeyValuePair<float, Sample>> L_near = populateSortedList(X_near, x_new);
@@ -138,7 +145,7 @@ public static class PathFinding
                 continue;
             }
 
-            samples.Add(x_new);
+            visited.Add(x_new);
             addEdge(x_parent, x_new);
             rewireVertices(X_near, x_new);
         }
@@ -161,7 +168,6 @@ public static class PathFinding
             {
                 if (hits[j].collider.gameObject.tag == "obstacle")
                     break;
-
                 Sample validSample = new Sample(samplePos); //Only this part is different
                 sampleList.Add(validSample);
             }
@@ -170,17 +176,12 @@ public static class PathFinding
     
     //Finds Samples near x_new
     //within the distance of rad
-    private static List<Sample> near(List<Sample> samples, int x_new_index, float rad)
+    private static List<Sample> near(List<Sample> samples, Sample x_new, float rad)
     {
-        Sample x_new = samples[x_new_index];
         List<Sample> ans = new List<Sample>();
 
         for (int i = 0; i < samples.Count; i++)
         {
-            if (i == x_new_index)
-            {
-                continue;
-            }
             Sample x = samples[i];
             float dist = (x.pos - x_new.pos).magnitude;
             if (dist < rad)
