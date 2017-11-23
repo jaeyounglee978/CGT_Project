@@ -6,6 +6,7 @@ using UnityEngine;
 public class SceneManager : MonoBehaviour
 {
 	public bool ReplanningFlag;
+    public bool moving;//do nothing when an ostacle is moving
 	GameObject Floor;
 	GameObject Agent;
 	GameObject Target;
@@ -20,6 +21,7 @@ public class SceneManager : MonoBehaviour
 	{
 		path = null;
 		ReplanningFlag = true;
+        moving = false;
 		Floor = GameObject.Find ("Floor");
 		Agent = GameObject.Find ("Agent");
 		Target = GameObject.Find ("Target");
@@ -32,6 +34,10 @@ public class SceneManager : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
+        if (moving)//obstacle is now moving
+        {
+            return;
+        }
 		if (ReplanningFlag)
 		{
 			//Debug.Log ("Replanning Start");

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ObstacleCheck : MonoBehaviour {
-    private GameObject sceneManager;
-    private SceneManager m;
-    private Vector3 pre, cur;
-    private Vector3 displacement;
-    public bool selected;
+    private GameObject sceneManager;//Scene manager game object
+    private SceneManager m;//Scene manager script
+    private Vector3 pre, cur;//past position and current position
+    private Vector3 displacement;//displacement between original position of this obstacle and position of mouse cursor
+    public bool selected;//indicates whether it is clicked
 
 	// Use this for initialization
 	void Start () {
@@ -28,6 +28,7 @@ public class ObstacleCheck : MonoBehaviour {
         if (!Input.GetButton("Fire1"))
         {
             selected = false;
+            m.moving = false;
         }
         if (selected)
         {
@@ -40,5 +41,6 @@ public class ObstacleCheck : MonoBehaviour {
     {
         selected = true;
         displacement = - Camera.main.ScreenToWorldPoint(Input.mousePosition) + transform.position;
+        m.moving = true;
     }
 }
