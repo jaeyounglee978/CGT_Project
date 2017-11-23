@@ -43,12 +43,13 @@ public class SceneManager : MonoBehaviour
 			//Debug.Log ("Replanning Start");
 			path = PathFinding.FindPath (Agent.transform.position, Target.transform.position, leftBottom.x, rightTop.x, leftBottom.z, rightTop.z);
 			ReplanningFlag = false;
-			currentPath = path.Pop ();
+            if (path.Count > 0)
+			    currentPath = path.Pop ();
 		}
 		else
 		{
             //ReplanningFlag = true;
-			if ((Agent.transform.position - currentPath).magnitude <= 0.01f)
+			if ((Agent.transform.position - currentPath).magnitude <= 0.01f && path.Count > 0)
 			{
 				currentPath = path.Pop ();
 				currentPath.y += Agent.GetComponent<Renderer> ().bounds.center.y;
