@@ -485,8 +485,9 @@ GameObject:
   - component: {fileID: 981026879}
   - component: {fileID: 981026878}
   - component: {fileID: 981026877}
+  - component: {fileID: 981026881}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Obstacle_01
   m_TagString: obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -558,6 +559,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &981026881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 981026876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b79d646209390064aa63e3300b1e1569, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1506773070
 GameObject:
   m_ObjectHideFlags: 0
@@ -598,6 +610,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b013463a601f5434fae5590295c08314, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ReplanningFlag: 0
 --- !u!1 &1575313147
 GameObject:
   m_ObjectHideFlags: 0
@@ -609,8 +622,9 @@ GameObject:
   - component: {fileID: 1575313150}
   - component: {fileID: 1575313149}
   - component: {fileID: 1575313148}
+  - component: {fileID: 1575313152}
   m_Layer: 0
-  m_Name: Cube (1)
+  m_Name: Obstacle_02
   m_TagString: obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -682,6 +696,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1575313152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1575313147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b79d646209390064aa63e3300b1e1569, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1823856490
 GameObject:
   m_ObjectHideFlags: 0
