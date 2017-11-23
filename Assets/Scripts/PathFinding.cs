@@ -102,7 +102,7 @@ public static class PathFinding
 		List<Sample> samples = new List<Sample> ();
 
         //RRT_PathFinding (samples, q_init, q_quit, wld_left, wld_right, wld_top, wld_bottom, 100);
-        RRT_star (samples, q_init, q_quit, wld_left, wld_right, wld_top, wld_bottom, 5000);
+        RRT_star (samples, q_init, q_quit, wld_left, wld_right, wld_top, wld_bottom, 500);
 
         Sample d = q_quit;
 		Stack<Vector3> positionStack = new Stack<Vector3> ();

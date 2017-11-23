@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class SceneManager : MonoBehaviour
 {
-	bool ReplanningFlag;
+	public bool ReplanningFlag;
 	GameObject Floor;
 	GameObject Agent;
 	GameObject Target;
@@ -41,6 +41,7 @@ public class SceneManager : MonoBehaviour
 		}
 		else
 		{
+            //ReplanningFlag = true;
 			if ((Agent.transform.position - currentPath).magnitude <= 0.01f)
 			{
 				currentPath = path.Pop ();
