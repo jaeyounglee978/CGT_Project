@@ -17,6 +17,8 @@ public class SceneManager : MonoBehaviour
 	Vector3 rightTop;
 	float samplingTime;
 	float movingTime;
+	bool pathFindingEnd;
+	Coroutine c;
 
 	// Use this for initialization
 	void Start ()
@@ -32,6 +34,7 @@ public class SceneManager : MonoBehaviour
 		rightTop = new Vector3 (floorBound.center.x + floorBound.size.x / 2, 0, floorBound.center.z + floorBound.size.z / 2);
 		samplingTime = 0.0f;
 		movingTime = 0.0f;
+		pathFindingEnd = false;
 	}
 	
 	// Update is called once per frame
@@ -45,16 +48,16 @@ public class SceneManager : MonoBehaviour
 		{
 			//Debug.Log ("Replanning Start");
 			samplingTime = 0.0f;
-			Debug.Log ("Start : " + Agent.transform.position);
-			Debug.Log ("End : " + Target.transform.position);
-			path = PathFinding.FindPath (Agent.transform.position, Target.transform.position,
-										leftBottom.x, rightTop.x, leftBottom.z, rightTop.z,
-										0);
-			samplingTime += Time.deltaTime;
+			//path = PathFinding.FindPath (Agent.transform.position, Target.transform.position,
+			//							leftBottom.x, rightTop.x, leftBottom.z, rightTop.z,
+			//							1);
 
-			ReplanningFlag = false;
-            if (path.Count > 0)
-			    currentPath = path.Pop ();
+			if (c == null)
+			{
+				c = StartCoroutine (PathFindingCouroutine (Agent.transform.position, Target.transform.position,
+															leftBottom.x, rightTop.x, leftBottom.z, rightTop.z,
+															1));
+			}
 		}
 		else
 		{
@@ -71,7 +74,6 @@ public class SceneManager : MonoBehaviour
 				
 				currentPath = path.Pop ();
 				Debug.Log (currentPath);
-				Debug.Log ("sampling time : " + samplingTime);
 
 			}
 			
@@ -79,15 +81,18 @@ public class SceneManager : MonoBehaviour
 			movingTime += Time.deltaTime;
 		}
 
-		// If agent arrived target, check clear condition.
-        /*
-		if (Agent.transform.position == Target.transform.position)
-		{
-			if (CheckClearState ())
-				Debug.Log ("Clear!");
-			else
-				Debug.Log ("Failed");
-		}*/
+	}
+
+	IEnumerator PathFindingCouroutine(Vector3 aPos, Vector3 tPos, float lBx, float rTx, float lBz, float rTz, int flag)
+	{
+		yield return new WaitUntil(() => (path = PathFinding.FindPath(aPos, tPos, lBx, rTx, lBz, rTz, flag)) != null);
+		ReplanningFlag = false;
+		samplingTime += Time.deltaTime;
+
+		if (path.Count > 0)
+			currentPath = path.Pop ();
+
+		Debug.Log ("sampling time : " + samplingTime);
 	}
 
 	public void ObjectPlaced()

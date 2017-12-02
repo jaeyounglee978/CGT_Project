@@ -115,10 +115,10 @@ public static class PathFinding
 		switch (flag)
 		{
 		case 0:
-			RRT (samples, q_init, q_quit, wld_left, wld_right, wld_top, wld_bottom, 1000);
+			RRT (samples, q_init, q_quit, wld_left, wld_right, wld_top, wld_bottom, 100000);
 			break;
 		case 1:
-			RRT_star (samples, q_init, q_quit, wld_left, wld_right, wld_top, wld_bottom, 1000);
+			RRT_star (samples, q_init, q_quit, wld_left, wld_right, wld_top, wld_bottom, 100000);
 			break;
 		default:
 			break;
@@ -195,6 +195,8 @@ public static class PathFinding
             {
                 if (hits[j].collider.gameObject.tag == "obstacle")
                     break;
+
+				samplePos.y += 1;
                 Sample validSample = new Sample(samplePos); //Only this part is different
                 sampleList.Add(validSample);
             }
@@ -207,7 +209,7 @@ public static class PathFinding
     {
         List<Sample> ans = new List<Sample>();
 
-		rad = Mathf.Pow(Mathf.Log(samples.Count) / samples.Count, 1/3);
+		//rad = Mathf.Pow(Mathf.Log(samples.Count) / samples.Count, 1/3);
 
         for (int i = 0; i < samples.Count; i++)
         {
