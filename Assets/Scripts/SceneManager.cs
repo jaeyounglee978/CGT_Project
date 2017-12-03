@@ -63,13 +63,15 @@ public class SceneManager : MonoBehaviour
 			{
 				pathFindingC.isRunning = true;
 
+				/*
 				StartCoroutine (pathFindingC.FindPathByRRT (Agent.transform.position, Target.transform.position,
 								leftBottom.x, rightTop.x, leftBottom.z, rightTop.z,
-								pathStack, 5000));
-				/*
+								pathStack, 50000));
+				*/				
+
 				StartCoroutine (pathFindingC.FindPathByRRTstar (Agent.transform.position, Target.transform.position,
 								leftBottom.x, rightTop.x, leftBottom.z, rightTop.z,
-								pathStack, 5000));*/
+								pathStack, 10000));
 			}
 			
 			samplingTime += Time.deltaTime;
@@ -117,6 +119,7 @@ public class SceneManager : MonoBehaviour
 	public void ObjectPlaced()
 	{
 		replanningFlag = true;
+		pathFindingC.isRunning = true;
 		pathStack = new Stack<Vector3> ();
 	}
 

@@ -63,11 +63,11 @@ public class PathFindingC
 
 	//Finds Samples near x_new
 	//within the distance of rad
-	private List<Sample> Near(List<Sample> samples, Sample x_new, float rad)
+	private List<Sample> Near(List<Sample> samples, Sample x_new)
 	{
 		List<Sample> ans = new List<Sample>();
 
-		//rad = Mathf.Pow(Mathf.Log(samples.Count) / samples.Count, 1/3);
+		float rad = Mathf.Pow(Mathf.Log(samples.Count) / samples.Count, 1/3);
 
 		for (int i = 0; i < samples.Count; i++)
 		{
@@ -241,7 +241,6 @@ public class PathFindingC
 
 		Debug.Log ("pathStack number : " + pathStack.Count);
 
-		isRunning = false;
 		isFinished = true;
 	}
 
@@ -279,7 +278,7 @@ public class PathFindingC
 			samplePos.y += 1;
 			validSample = new Sample(samplePos); //Only this part is different
 			samples.Add(validSample);
-			List<Sample> X_near = Near(visited, validSample, (wld_left - wld_right) / 5); // I assigned this rad value without thinking. Someday matbe we should change this value
+			List<Sample> X_near = Near (visited, validSample);//, (wld_left - wld_right) / 5); // I assigned this rad value without thinking. Someday matbe we should change this value
 			List<KeyValuePair<float, Sample>> L_near = PopulateSortedList(X_near, validSample);
 			Sample x_parent = FindBestParent(L_near, validSample);//We found its parent! Yeah!
 			if (x_parent != null)//x_new has no parent
@@ -298,7 +297,7 @@ public class PathFindingC
 
 		// add last sample
 		samples.Add(q_quit);
-		List<Sample> Xq_near = Near(visited, q_quit, (wld_left - wld_right) / 5); // I assigned this rad value without thinking. Someday matbe we should change this value
+		List<Sample> Xq_near = Near(visited, q_quit);//, (wld_left - wld_right) / 5); // I assigned this rad value without thinking. Someday matbe we should change this value
 
 		List<KeyValuePair<float, Sample>> Lq_near = PopulateSortedList(Xq_near, q_quit);
 		Sample xq_parent = FindBestParent(Lq_near, q_quit);//We found its parent! Yeah!
@@ -318,7 +317,7 @@ public class PathFindingC
 			d = d.parent;
 		}
 
-		isRunning = false;
+		Debug.Log ("End");
 		isFinished = true;
 	}
 }
