@@ -5,26 +5,31 @@ using UnityEngine;
 
 public class SceneManager : MonoBehaviour
 {
-	public bool ReplanningFlag;
+	public bool replanningFlag;
     public bool moving;//do nothing when an ostacle is moving
 	GameObject Floor;
 	GameObject Agent;
 	GameObject Target;
-	Stack<Vector3> path;
+	Stack<Vector3> pathStack;
 	Vector3 currentPath;
 	Vector3 velocity;
 	Vector3 leftBottom;
 	Vector3 rightTop;
 	float samplingTime;
 	float movingTime;
-	bool pathFindingEnd;
+	float speed = 2.0f;
+	PathFindingC pathFindingC;
 	Coroutine c;
+	public GameObject pathIndicator;
+	public List<GameObject> obstacles = new List<GameObject> ();
 
 	// Use this for initialization
 	void Start ()
 	{
-		path = null;
-		ReplanningFlag = true;
+		for (int i = 0; i < obstacles.Count; i++)
+			obstacles [i].GetComponent<Renderer> ().material.SetColor ("_Color", Color.black);
+		pathStack = new Stack<Vector3> ();
+		replanningFlag = true;
         moving = false;
 		Floor = GameObject.Find ("Floor");
 		Agent = GameObject.Find ("Agent");
@@ -34,7 +39,10 @@ public class SceneManager : MonoBehaviour
 		rightTop = new Vector3 (floorBound.center.x + floorBound.size.x / 2, 0, floorBound.center.z + floorBound.size.z / 2);
 		samplingTime = 0.0f;
 		movingTime = 0.0f;
-		pathFindingEnd = false;
+		pathFindingC = new PathFindingC ();
+
+		Agent.GetComponent<Renderer> ().material.SetColor ("_Color", Color.blue);
+		Target.GetComponent<Renderer> ().material.SetColor ("_Color", Color.green);
 	}
 	
 	// Update is called once per frame
@@ -44,40 +52,53 @@ public class SceneManager : MonoBehaviour
         {
             return;
         }
-		if (ReplanningFlag)
+		if (replanningFlag)
 		{
 			//Debug.Log ("Replanning Start");
-			samplingTime = 0.0f;
 			//path = PathFinding.FindPath (Agent.transform.position, Target.transform.position,
 			//							leftBottom.x, rightTop.x, leftBottom.z, rightTop.z,
 			//							1);
 
-			if (c == null)
+			if (!pathFindingC.isRunning)
 			{
-				c = StartCoroutine (PathFindingCouroutine (Agent.transform.position, Target.transform.position,
-															leftBottom.x, rightTop.x, leftBottom.z, rightTop.z,
-															1));
+				pathFindingC.isRunning = true;
+				StartCoroutine (pathFindingC.FindPathByRRT (Agent.transform.position, Target.transform.position,
+								leftBottom.x, rightTop.x, leftBottom.z, rightTop.z,
+								pathStack, 5000));
+				/*
+				StartCoroutine (pathFindingC.FindPathByRRT (Agent.transform.position, Target.transform.position,
+								leftBottom.x, rightTop.x, leftBottom.z, rightTop.z,
+								pathStack, 5000));*/
+			}
+			
+			samplingTime += Time.deltaTime;
+
+			if (pathFindingC.isFinished)
+			{
+				replanningFlag = false;
+				ShowPath (pathStack);
+				currentPath = pathStack.Pop();
+				Debug.Log ("sampling Time : " + samplingTime);
 			}
 		}
 		else
 		{
-            //ReplanningFlag = true;
+			
 			if ((Agent.transform.position - currentPath).magnitude <= 0.01f)
 			{
-				Debug.Log (path.Count);
+				Debug.Log (pathStack.Count);
 				Debug.Log ((Agent.transform.position - Target.transform.position).magnitude);
-				if (path.Count == 0 || (Agent.transform.position - Target.transform.position).magnitude <= 0.01f)
+				if (pathStack.Count == 0 || (Agent.transform.position - Target.transform.position).magnitude <= 0.01f)
 				{
 					Debug.Log ("moving time : " + movingTime);
 					return;
 				}
 				
-				currentPath = path.Pop ();
+				currentPath = pathStack.Pop ();
 				Debug.Log (currentPath);
-
 			}
 			
-			Agent.transform.position = Vector3.SmoothDamp (Agent.transform.position, currentPath, ref velocity, 1.0f);
+			Agent.transform.position = Vector3.MoveTowards (Agent.transform.position, currentPath, speed * Time.deltaTime);
 			movingTime += Time.deltaTime;
 		}
 
@@ -85,19 +106,20 @@ public class SceneManager : MonoBehaviour
 
 	IEnumerator PathFindingCouroutine(Vector3 aPos, Vector3 tPos, float lBx, float rTx, float lBz, float rTz, int flag)
 	{
-		yield return new WaitUntil(() => (path = PathFinding.FindPath(aPos, tPos, lBx, rTx, lBz, rTz, flag)) != null);
-		ReplanningFlag = false;
+		yield return new WaitUntil(() => (pathStack = PathFinding.FindPath(aPos, tPos, lBx, rTx, lBz, rTz, flag)) != null);
+		replanningFlag = false;
 		samplingTime += Time.deltaTime;
 
-		if (path.Count > 0)
-			currentPath = path.Pop ();
+		if (pathStack.Count > 0)
+			currentPath = pathStack.Pop ();
 
 		Debug.Log ("sampling time : " + samplingTime);
 	}
 
 	public void ObjectPlaced()
 	{
-		ReplanningFlag = true;
+		replanningFlag = true;
+		pathStack = new Stack<Vector3> ();
 	}
 
 	private bool CheckClearState()
@@ -105,4 +127,13 @@ public class SceneManager : MonoBehaviour
 		return true;
 	}
 
+	private void ShowPath(Stack<Vector3> path)
+	{
+		foreach (Vector3 i in path)
+		{
+			GameObject g = Instantiate (pathIndicator);
+			g.GetComponent<Renderer> ().material.SetColor ("_Color", Color.red);
+			g.transform.position = i;
+		}
+	}
 }

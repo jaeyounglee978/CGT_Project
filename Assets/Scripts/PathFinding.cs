@@ -115,14 +115,15 @@ public static class PathFinding
 		switch (flag)
 		{
 		case 0:
-			RRT (samples, q_init, q_quit, wld_left, wld_right, wld_top, wld_bottom, 100000);
+			RRT (samples, q_init, q_quit, wld_left, wld_right, wld_top, wld_bottom, 10);
 			break;
 		case 1:
-			RRT_star (samples, q_init, q_quit, wld_left, wld_right, wld_top, wld_bottom, 100000);
+			RRT_star (samples, q_init, q_quit, wld_left, wld_right, wld_top, wld_bottom, 10);
 			break;
 		default:
 			break;
 		}
+
 
         Sample d = q_quit;
 		Stack<Vector3> positionStack = new Stack<Vector3> ();
@@ -146,6 +147,8 @@ public static class PathFinding
 		Sample closest = FindClosestSample (q_quit.pos, samples);
 		q_quit.parent = closest;
 		q_quit.ReCalculateCose ();
+
+		Debug.Log ("Total vallid samples : " + (samples.Count - 1));
 		samples.Add (q_quit);
 	}
 
@@ -155,6 +158,8 @@ public static class PathFinding
         samples.Add(q_init);
         q_init.cost = 0;
         SamplingWOP(samples, wld_left, wld_right, wld_top, wld_bottom, n);
+
+		Debug.Log ("Total vallid samples : " + (samples.Count - 1));
         samples.Add(q_quit);
 
         List<Sample> visited = new List<Sample>();

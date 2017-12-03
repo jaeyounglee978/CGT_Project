@@ -22,7 +22,7 @@ public class ObstacleCheck : MonoBehaviour {
         cur = transform.position;
         if ((cur - pre).magnitude > 0.001)
         {
-            m.ReplanningFlag = true;
+			m.replanningFlag = true;
         }
         pre = cur;
         if (!Input.GetButton("Fire1"))
