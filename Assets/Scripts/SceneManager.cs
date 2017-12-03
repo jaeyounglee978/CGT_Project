@@ -58,7 +58,7 @@ public class SceneManager : MonoBehaviour
 			//path = PathFinding.FindPath (Agent.transform.position, Target.transform.position,
 			//							leftBottom.x, rightTop.x, leftBottom.z, rightTop.z,
 			//							1);
-
+			// aaa
 			if (!pathFindingC.isRunning)
 			{
 				pathFindingC.isRunning = true;
