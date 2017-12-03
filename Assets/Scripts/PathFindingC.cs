@@ -178,6 +178,7 @@ public class PathFindingC
 								 	 float wld_left, float wld_right, float wld_top, float wld_bottom,
 									 Stack<Vector3> pathStack, int numberOfSample)
 	{
+		Debug.Log ("Start RRT");
 		Sample q_init = new Sample (pos_init, null);
 		Sample q_quit = new Sample (pos_quit, null);
 		List<Sample> samples = new List<Sample> ();
@@ -248,6 +249,7 @@ public class PathFindingC
 										  float wld_left, float wld_right, float wld_top, float wld_bottom,
 										  Stack<Vector3> pathStack, int numberOfSample)
 	{
+		Debug.Log ("Start RRT*");
 		Sample q_init = new Sample (pos_init, null);
 		Sample q_quit = new Sample (pos_quit, null);
 		List<Sample> samples = new List<Sample> ();

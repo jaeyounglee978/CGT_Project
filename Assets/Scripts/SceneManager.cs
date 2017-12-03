@@ -63,15 +63,15 @@ public class SceneManager : MonoBehaviour
 			{
 				pathFindingC.isRunning = true;
 
-				/*
+
 				StartCoroutine (pathFindingC.FindPathByRRT (Agent.transform.position, Target.transform.position,
 								leftBottom.x, rightTop.x, leftBottom.z, rightTop.z,
-								pathStack, 50000));
-				*/				
+								pathStack, 10000));
 
+				/*
 				StartCoroutine (pathFindingC.FindPathByRRTstar (Agent.transform.position, Target.transform.position,
 								leftBottom.x, rightTop.x, leftBottom.z, rightTop.z,
-								pathStack, 10000));
+								pathStack, 10000));*/
 			}
 			
 			samplingTime += Time.deltaTime;
