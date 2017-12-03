@@ -129,11 +129,16 @@ public class SceneManager : MonoBehaviour
 
 	private void ShowPath(Stack<Vector3> path)
 	{
-		foreach (Vector3 i in path)
+		Vector3[] p = path.ToArray ();
+
+		Stack<Vector3> s = new Stack<Vector3> (path);
+
+		//for (int i = 0; i < p.Length; i++)
+		while(s.Count != 0)
 		{
 			GameObject g = Instantiate (pathIndicator);
 			g.GetComponent<Renderer> ().material.SetColor ("_Color", Color.red);
-			g.transform.position = i;
+			g.transform.position = s.Pop();
 		}
 	}
 }
