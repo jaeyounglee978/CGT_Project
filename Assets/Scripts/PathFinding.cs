@@ -69,7 +69,7 @@ public static class PathFinding
 				// We need to modify steps below for more effective algorithm.
 				Sample closestSample = FindClosestSample (samplePos, sampleList);
 
-				if(!CheckCollisionFree(closestSample, samplePos))
+				if(!CheckValidPath(closestSample, samplePos))
 					continue;
 				
 				Sample validSample = new Sample(samplePos, closestSample);
@@ -255,7 +255,7 @@ public static class PathFinding
         for (int i = 0; i < L_near.Count; i++)
         {
             Sample x_n = L_near[i].Value;
-            if (CheckCollisionFree(x_n, x_new))
+            if (CheckValidPath(x_n, x_new))
             {
                 return x_n;
             }
@@ -276,7 +276,7 @@ public static class PathFinding
     //checks a direct path from x1 to x2. Simply checks is there any obstacle object between x1 and x;
     //returns true if there is no obstacle between x1 and x2.
     //Now it only returns true. We should modify it
-    private static bool CheckCollisionFree(Sample x1, Sample x2)
+    private static bool CheckValidPath(Sample x1, Sample x2)
     {
 		RaycastHit[] hits = Physics.RaycastAll(x1.pos + Vector3.up/2, x2.pos - x1.pos);
         for (int i = 0; i < hits.Length; i++)
@@ -288,7 +288,7 @@ public static class PathFinding
         }
         return true;
 	}
-	private static bool CheckCollisionFree(Sample x1, Vector3 x2)
+	private static bool CheckValidPath(Sample x1, Vector3 x2)
 	{
 		RaycastHit[] hits = Physics.RaycastAll(x1.pos + Vector3.up/2, x2 - x1.pos);
 		for (int i = 0; i < hits.Length; i++)
@@ -311,7 +311,7 @@ public static class PathFinding
             float dist = (x_n.pos - x_new.pos).magnitude;
             if (x_new.cost + dist < x_n.cost)
             {
-                if (CheckCollisionFree(x_n, x_new))
+                if (CheckValidPath(x_n, x_new))
                 {
                     Sample x_old = x_n.parent;
                     x_old.childs.Remove(x_n);

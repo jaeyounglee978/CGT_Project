@@ -62,11 +62,12 @@ public class SceneManager : MonoBehaviour
 			if (!pathFindingC.isRunning)
 			{
 				pathFindingC.isRunning = true;
+
 				StartCoroutine (pathFindingC.FindPathByRRT (Agent.transform.position, Target.transform.position,
 								leftBottom.x, rightTop.x, leftBottom.z, rightTop.z,
 								pathStack, 5000));
 				/*
-				StartCoroutine (pathFindingC.FindPathByRRT (Agent.transform.position, Target.transform.position,
+				StartCoroutine (pathFindingC.FindPathByRRTstar (Agent.transform.position, Target.transform.position,
 								leftBottom.x, rightTop.x, leftBottom.z, rightTop.z,
 								pathStack, 5000));*/
 			}
@@ -76,7 +77,7 @@ public class SceneManager : MonoBehaviour
 			if (pathFindingC.isFinished)
 			{
 				replanningFlag = false;
-				ShowPath (pathStack);
+				//ShowPath (pathStack);
 				currentPath = pathStack.Pop();
 				Debug.Log ("sampling Time : " + samplingTime);
 			}
@@ -86,8 +87,6 @@ public class SceneManager : MonoBehaviour
 			
 			if ((Agent.transform.position - currentPath).magnitude <= 0.01f)
 			{
-				Debug.Log (pathStack.Count);
-				Debug.Log ((Agent.transform.position - Target.transform.position).magnitude);
 				if (pathStack.Count == 0 || (Agent.transform.position - Target.transform.position).magnitude <= 0.01f)
 				{
 					Debug.Log ("moving time : " + movingTime);
@@ -95,7 +94,6 @@ public class SceneManager : MonoBehaviour
 				}
 				
 				currentPath = pathStack.Pop ();
-				Debug.Log (currentPath);
 			}
 			
 			Agent.transform.position = Vector3.MoveTowards (Agent.transform.position, currentPath, speed * Time.deltaTime);

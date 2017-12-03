@@ -8,6 +8,7 @@ public class PathFindingC
 	System.Random random;
 	public bool isRunning;
 	public bool isFinished;
+	float radius = 0.5f * Mathf.Sqrt (3) / 2;
 
 	public PathFindingC()
 	{
@@ -16,41 +17,30 @@ public class PathFindingC
 		isFinished = false;
 	}
 
-	// Get intial Sample list(== initial position), then make sample tree.
-	private void Sampling(List<Sample> sampleList, float wld_l, float wld_r, float wld_t, float wld_b, int n)
+	public bool CheckSampleValidity(Vector3 pos)
 	{
-		for (int i = 0; i < n; i++)
+		Vector3 s = pos + Vector3.up * 10;
+
+		RaycastHit[] hits = Physics.RaycastAll (s, Vector3.down, 15f);
+
+		for(int i = 0; i < hits.Length; i++)
 		{
-			double x = random.NextDouble () * (wld_r - wld_l) + wld_l;
-			double z = random.NextDouble () * (wld_t - wld_b) + wld_b;
-
-			Vector3 samplePos = new Vector3 ((float)x, 0, (float)z);
-			Vector3 s = samplePos + Vector3.up * 10;
-
-			RaycastHit[] hits = Physics.RaycastAll (s, Vector3.down);
-
-			for(int j = 0; j < hits.Length; j++)
-			{
-				if (hits [j].collider.gameObject.tag == "obstacle")
-					break;
-
-				samplePos.y += 1;
-
-				// We need to modify steps below for more effective algorithm.
-				Sample closestSample = FindClosestSample (samplePos, sampleList);
-
-				if(!CheckValidPath(closestSample, samplePos))
-					continue;
-
-				Sample validSample = new Sample(samplePos, closestSample);
-				sampleList.Add (validSample);
-			}
+			if (hits [i].collider.gameObject.tag == "obstacle")
+				return false;
 		}
-	}
 
-	// Reassemble Tree for algorithms like RRT*
-	public void ReassembleTree()
-	{
+		Collider[] colliders = Physics.OverlapSphere (pos, radius);
+
+		if (colliders.Length == 0)
+			return true;
+
+		for(int j = 0; j < colliders.Length; j++)
+		{
+			if (colliders [j].gameObject.tag == "obstacle")
+				return false;
+		}
+
+		return true;
 	}
 
 	// Finds the closest sample.
@@ -153,7 +143,7 @@ public class PathFindingC
 	}
 	private bool CheckValidPath(Sample x1, Vector3 x2)
 	{
-		RaycastHit[] hits = Physics.RaycastAll(x1.pos + Vector3.up/2, x2 - x1.pos);
+		RaycastHit[] hits = Physics.RaycastAll(x1.pos, x2 - x1.pos);
 		for (int i = 0; i < hits.Length; i++)
 		{
 			if ((hits[i].point - x1.pos).magnitude > (x2 - x1.pos).magnitude)
@@ -202,7 +192,8 @@ public class PathFindingC
 			double z = random.NextDouble () * (wld_top - wld_bottom) + wld_bottom;
 
 			Vector3 samplePos = new Vector3 ((float)x, 0, (float)z);
-			Vector3 s = samplePos + Vector3.up * 10;
+
+			/*Vector3 s = samplePos + Vector3.up * 10;
 
 			RaycastHit[] hits = Physics.RaycastAll (s, Vector3.down, 15f);
 
@@ -210,7 +201,10 @@ public class PathFindingC
 			{
 				if (hits [j].collider.gameObject.tag == "obstacle")
 					goto END;
-			}
+			}*/
+
+			if (!CheckSampleValidity (samplePos))
+				goto END;
 
 			samplePos.y += 1;
 
