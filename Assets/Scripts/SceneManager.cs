@@ -62,22 +62,24 @@ public class SceneManager : MonoBehaviour
 			if (!pathFindingC.isRunning)
 			{
 				pathFindingC.isRunning = true;
+                pathFindingC.isFinished = false;
 
-
+                /*
 				StartCoroutine (pathFindingC.FindPathByRRT (Agent.transform.position, Target.transform.position,
 								leftBottom.x, rightTop.x, leftBottom.z, rightTop.z,
-								pathStack, 10000));
+								pathStack, 10000));*/
 
-				/*
+				
 				StartCoroutine (pathFindingC.FindPathByRRTstar (Agent.transform.position, Target.transform.position,
 								leftBottom.x, rightTop.x, leftBottom.z, rightTop.z,
-								pathStack, 10000));*/
+								pathStack, 10000));
 			}
 			
 			samplingTime += Time.deltaTime;
 
 			if (pathFindingC.isFinished)
 			{
+                pathFindingC.isRunning = false;
 				replanningFlag = false;
 				//ShowPath (pathStack);
 				currentPath = pathStack.Pop();
@@ -86,7 +88,8 @@ public class SceneManager : MonoBehaviour
 		}
 		else
 		{
-			
+            if (pathFindingC.isRunning || !pathFindingC.pathExists)
+                return;
 			if ((Agent.transform.position - currentPath).magnitude <= 0.01f)
 			{
 				if (pathStack.Count == 0 || (Agent.transform.position - Target.transform.position).magnitude <= 0.01f)

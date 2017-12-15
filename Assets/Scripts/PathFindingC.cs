@@ -8,6 +8,8 @@ public class PathFindingC
 	System.Random random;
 	public bool isRunning;
 	public bool isFinished;
+    public bool pathExists;
+
 	float radius = 0.5f * Mathf.Sqrt (3) / 2;
 
 	public PathFindingC()
@@ -15,6 +17,7 @@ public class PathFindingC
 		random = new System.Random();
 		isRunning = false;
 		isFinished = false;
+        pathExists = true;
 	}
 
 	public bool CheckSampleValidity(Vector3 pos)
@@ -182,7 +185,6 @@ public class PathFindingC
 		Sample q_init = new Sample (pos_init, null);
 		Sample q_quit = new Sample (pos_quit, null);
 		List<Sample> samples = new List<Sample> ();
-
 		//RRT (samples, q_init, q_quit, wld_left, wld_right, wld_top, wld_bottom, 10);
 		samples.Add(q_init);
 
@@ -239,10 +241,10 @@ public class PathFindingC
 			pathStack.Push (d.pos);
 			d = d.parent;
 		}
-
 		Debug.Log ("pathStack number : " + pathStack.Count);
 
 		isFinished = true;
+        //isRunning = false;
 	}
 
 	public IEnumerator FindPathByRRTstar(Vector3 pos_init, Vector3 pos_quit, 
@@ -318,8 +320,12 @@ public class PathFindingC
 			pathStack.Push (d.pos);
 			d = d.parent;
 		}
-
+        if (CheckValidPath(d, q_init))
+            pathExists = true;
+        else
+            pathExists = false;
 		Debug.Log ("End");
 		isFinished = true;
+        //isRunning = false;
 	}
 }
