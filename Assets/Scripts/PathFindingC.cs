@@ -312,6 +312,12 @@ public class PathFindingC
 			RewireVertices(Xq_near, q_quit);
 		}
 
+        //initialize stack
+        while (pathStack.Count > 0)
+        {
+            pathStack.Pop();
+        }
+
 		Sample d = q_quit;
 
 		// climb up tree
@@ -323,7 +329,15 @@ public class PathFindingC
         if (CheckValidPath(d, q_init))
             pathExists = true;
         else
+        {
             pathExists = false;
+            d = FindClosestSample(q_quit.pos, visited);
+            while (d.parent != null)
+            {
+                pathStack.Push(d.pos);
+                d = d.parent;
+            }
+        }
 		Debug.Log ("End");
 		isFinished = true;
         //isRunning = false;

@@ -81,14 +81,16 @@ public class SceneManager : MonoBehaviour
 			{
                 pathFindingC.isRunning = false;
 				replanningFlag = false;
-				//ShowPath (pathStack);
+                //ShowPath (pathStack);
+                if (pathStack.Count == 0)
+                    return;
 				currentPath = pathStack.Pop();
 				Debug.Log ("sampling Time : " + samplingTime);
 			}
 		}
 		else
 		{
-            if (pathFindingC.isRunning || !pathFindingC.pathExists)
+            if (pathFindingC.isRunning /*|| !pathFindingC.pathExists*/)
                 return;
 			if ((Agent.transform.position - currentPath).magnitude <= 0.01f)
 			{
