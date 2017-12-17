@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class SceneManager : MonoBehaviour
 {
+    public bool paused;
+
 	public bool replanningFlag;
     public bool moving;//do nothing when an ostacle is moving
 	GameObject Floor;
@@ -26,6 +28,7 @@ public class SceneManager : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
+        paused = false;
 		for (int i = 0; i < obstacles.Count; i++)
 			obstacles [i].GetComponent<Renderer> ().material.SetColor ("_Color", Color.black);
 		pathStack = new Stack<Vector3> ();
@@ -48,6 +51,10 @@ public class SceneManager : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
+        if (paused)
+            return;
+        if (Input.GetButton("Fire1") && (Agent.transform.position - Target.transform.position).magnitude <= 0.01f)
+            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
         if (moving)//obstacle is now moving
         {
             return;
