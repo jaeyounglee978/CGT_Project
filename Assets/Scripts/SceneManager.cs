@@ -18,7 +18,7 @@ public class SceneManager : MonoBehaviour
 	float samplingTime;
 	float movingTime;
 	float speed = 2.0f;
-	PathFindingC pathFindingC;
+	public PathFindingC pathFindingC;
 	Coroutine c;
 	public GameObject pathIndicator;
 	public List<GameObject> obstacles = new List<GameObject> ();

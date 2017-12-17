@@ -73,6 +73,8 @@ public class ObstacleCheck : MonoBehaviour {
 
     void OnMouseDown()
     {
+        if (m.pathFindingC.isRunning)
+            return;
         selected = true;
         displacement = - Camera.main.ScreenToWorldPoint(Input.mousePosition) + transform.position;
         m.moving = true;
