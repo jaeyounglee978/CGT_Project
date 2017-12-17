@@ -317,15 +317,20 @@ public class PathFindingC
         {
             pathStack.Pop();
         }
-
+        pathExists = true;
 		Sample d = q_quit;
-
+        if (d.parent == null)
+        {
+            pathExists = false;
+            d = FindClosestSample(q_quit.pos, visited);
+        }
 		// climb up tree
 		while (d.parent != null)
 		{
 			pathStack.Push (d.pos);
 			d = d.parent;
 		}
+        /*
         if (CheckValidPath(d, q_init))
             pathExists = true;
         else
@@ -337,7 +342,7 @@ public class PathFindingC
                 pathStack.Push(d.pos);
                 d = d.parent;
             }
-        }
+        }*/
 		Debug.Log ("End");
 		isFinished = true;
         //isRunning = false;
